@@ -19,6 +19,11 @@ on:
 jobs:
   greet:
     runs-on: ubuntu-latest
+    # Add "id-token" with the intended permissions.
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+    
     steps:
     - id: 'auth'
       name: 'Authenticate to Google Cloud'
@@ -26,6 +31,11 @@ jobs:
       with:
         workload_identity_provider: 'projects/972321173961/locations/global/workloadIdentityPools/my-pool/providers/my-provider'
         service_account: 'my-service-account@impactful-mode-268210.iam.gserviceaccount.com'
+        
+    # Install gcloud, `setup-gcloud` automatically picks up authentication from `auth`.
+    - name: 'Set up Cloud SDK'
+      uses: 'google-github-actions/setup-gcloud@v0'
+      
     - name: 'test'
       run: |-
         gcloud iam service-accounts list
