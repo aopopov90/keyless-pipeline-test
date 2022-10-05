@@ -20,6 +20,7 @@ jobs:
       with:
         workload_identity_provider: 'projects/972321173961/locations/global/workloadIdentityPools/gh-pool/providers/gh-provider'
         service_account: 'cloudsql-admin-sa@impactful-mode-268210.iam.gserviceaccount.com'
+        audience: 'google-wlif'
         
     # Install gcloud, `setup-gcloud` automatically picks up authentication from `auth`.
     - name: 'Set up Cloud SDK'
