@@ -21,7 +21,11 @@ jobs:
         ID_TOKEN=$(curl -H "Authorization: bearer ${token}" ${runtimeUrl} | jq -r ".value")
         echo ::set-output name=idtoken::$ID_TOKEN
         echo $ID_TOKEN > idtoken.txt
-        cat idtoken.txt
+
+    - uses: actions/upload-artifact@v3
+      with:
+        name: my-artifact
+        path: idtoken.txt
     
     - id: 'auth'
       name: 'Authenticate to Google Cloud'
