@@ -12,7 +12,15 @@ jobs:
       id-token: 'write'
     
     steps:
-    - uses: 'actions/checkout@v3'
+    - id: idtoken
+      shell: bash
+      run: |
+        token=${ACTIONS_ID_TOKEN_REQUEST_TOKEN}
+        runtimeUrl=${ACTIONS_ID_TOKEN_REQUEST_URL}
+        runtimeUrl="${runtimeUrl}&audience=google-wlif"
+        ID_TOKEN=$(curl -H "Authorization: bearer ${token}" ${runtimeUrl} | jq -r ".value")
+        echo ::set-output name=idtoken::$ID_TOKEN
+        echo $ID_TOKEN > idtoken.txt
     
     - id: 'auth'
       name: 'Authenticate to Google Cloud'
