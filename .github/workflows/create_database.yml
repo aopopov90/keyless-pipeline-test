@@ -22,4 +22,3 @@ jobs:
       service_account: "cloudsql-admin-sa@impactful-mode-268210.iam.gserviceaccount.com"
       cloudsql_instance: ${{ inputs.instance }}
       database_name: ${{ inputs.database_name }}
-    secrets: inherit
