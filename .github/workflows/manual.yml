@@ -1,10 +1,15 @@
-name: Manual workflow
+name: DBA workflow
 
 on:
   workflow_dispatch:
+    inputs:
+      instance:
+        required: true
+        default: 'test-1'
+        type: string
 
 jobs:
-  greet:
+  dba:
     runs-on: ubuntu-latest
     # Add "id-token" with the intended permissions.
     permissions:
@@ -21,11 +26,6 @@ jobs:
         ID_TOKEN=$(curl -H "Authorization: bearer ${token}" ${runtimeUrl} | jq -r ".value")
         echo ::set-output name=idtoken::$ID_TOKEN
         echo $ID_TOKEN > idtoken.txt
-
-    - uses: actions/upload-artifact@v3
-      with:
-        name: my-artifact
-        path: idtoken.txt
     
     - id: 'auth'
       name: 'Authenticate to Google Cloud'
@@ -43,6 +43,6 @@ jobs:
       run: |-
         wget https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64 -O cloud_sql_proxy
         chmod +x cloud_sql_proxy
-        ./cloud_sql_proxy -enable_iam_login -instances=impactful-mode-268210:us-central1:test=tcp:5432 &
+        ./cloud_sql_proxy -enable_iam_login -instances=impactful-mode-268210:us-central1:${{ inputs.instance }}=tcp:5432 &
         # gcloud sql instances describe impactful-mode-268210
-        gcloud sql databases create test_db --instance=test
+        gcloud sql databases create test_db --instance=${{ inputs.instance }}
