@@ -7,6 +7,9 @@ on:
         required: true
         default: 'test-1'
         type: string
+      database_name:
+        required: true
+        type: string
 
 jobs:
   dba:
@@ -41,8 +44,8 @@ jobs:
       
     - name: 'test'
       run: |-
-        wget https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64 -O cloud_sql_proxy
+        wget -q https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64 -O cloud_sql_proxy
         chmod +x cloud_sql_proxy
         ./cloud_sql_proxy -enable_iam_login -instances=impactful-mode-268210:us-central1:${{ inputs.instance }}=tcp:5432 &
         # gcloud sql instances describe impactful-mode-268210
-        gcloud sql databases create test_db --instance=${{ inputs.instance }}
+        gcloud sql databases create ${{ inputs.database_name }} --instance=${{ inputs.instance }}
