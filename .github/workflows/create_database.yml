@@ -20,5 +20,5 @@ jobs:
       workload_identity_pool: "gh-pool"
       workload_identity_provider: "gh-provider"
       service_account: "cloudsql-admin-sa@impactful-mode-268210.iam.gserviceaccount.com"
-      cloudsql_isntance: ${{ inputs.instance }}
+      cloudsql_instance: ${{ inputs.instance }}
       database_name: ${{ inputs.database_name }}
