@@ -1,4 +1,4 @@
-name: DBA workflow
+name: DBA workflow - reusable
 
 on:
   workflow_dispatch:
