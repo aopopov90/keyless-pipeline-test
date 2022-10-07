@@ -45,4 +45,4 @@ jobs:
         chmod +x cloud_sql_proxy
         ./cloud_sql_proxy -enable_iam_login -instances=impactful-mode-268210:us-central1:test=tcp:5432 &
         # gcloud sql instances describe impactful-mode-268210
-        gcloud sql databases list --instance=test
+        gcloud sql databases create test_db --instance=test
