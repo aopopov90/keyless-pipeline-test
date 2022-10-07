@@ -41,4 +41,7 @@ jobs:
       
     - name: 'test'
       run: |-
-        gcloud iam service-accounts list
+        wget https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64 -O cloud_sql_proxy
+        chmod +x cloud_sql_proxy
+        ./cloud_sql_proxy -enable_iam_login -instances=impactful-mode-268210:us-central1:test=tcp:5432
+        gcloud sql instances describe impactful-mode-268210
