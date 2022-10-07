@@ -14,7 +14,7 @@ on:
 jobs:
   call-reusable-workflow:
     name: "Create database"
-    uses: aopopov90/cloudsql-dba-reusable-workflows/.github/workflows/create_database.yaml.yml@develop
+    uses: aopopov90/cloudsql-dba-reusable-workflows/.github/workflows/create_database.yaml@develop
     with:
       project_number: "972321173961"
       workload_identity_pool: "gh-pool"
