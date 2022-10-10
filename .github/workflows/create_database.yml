@@ -5,7 +5,7 @@ on:
     inputs:
       instance:
         required: true
-        default: 'test-1'
+        default: 'test-3'
         type: string
       database_name:
         required: true
@@ -17,8 +17,8 @@ jobs:
     uses: aopopov90/cloudsql-dba-reusable-workflows/.github/workflows/create_database.yaml@develop
     with:
       project_number: ""
-      workload_identity_pool: "gh-pool"
-      workload_identity_provider: "gh-provider"
+      workload_identity_pool: "gh-pool-4ga"
+      workload_identity_provider: "gh-provider-4ga"
       service_account: ""
       cloudsql_instance: ${{ inputs.instance }}
       database_name: ${{ inputs.database_name }}
