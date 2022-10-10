@@ -16,9 +16,9 @@ jobs:
     name: "Create database"
     uses: aopopov90/cloudsql-dba-reusable-workflows/.github/workflows/create_database.yaml@develop
     with:
-      project_number: ""
+      project_number: "972321173961"
       workload_identity_pool: "gh-pool-4ga"
       workload_identity_provider: "gh-provider-4ga"
-      service_account: ""
+      service_account: "cloudsql-admin-sa@impactful-mode-268210.iam.gserviceaccount.com"
       cloudsql_instance: ${{ inputs.instance }}
       database_name: ${{ inputs.database_name }}
