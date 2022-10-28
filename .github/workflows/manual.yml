@@ -41,24 +41,16 @@ jobs:
     # Install gcloud, `setup-gcloud` automatically picks up authentication from `auth`.
     - name: 'Set up Cloud SDK'
       uses: 'google-github-actions/setup-gcloud@v0'
-      
-    - name: 'IAM user init'
-      env:
-        PGPASSWORD: ${{ secrets.PASSWORD }}
-      run: |-
-        # set password for the default user
-        gcloud sql users set-password postgres \
-          --instance=${{ inputs.instance }} \
-          --password=${PGPASSWORD}
-      
+        
+    - name: 'Verify IAM SA Admin user'
+      run: |-      
         # start proxy
         wget -q https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64 -O cloud_sql_proxy
         chmod +x cloud_sql_proxy
         ./cloud_sql_proxy -enable_iam_login -instances=impactful-mode-268210:us-central1:${{ inputs.instance }}=tcp:5432 &
         sleep 5
         
-        # do grants
-        psql "hostaddr=127.0.0.1 user=postgres"  <<END_OF_SQL
-        CREATE ROLE admin CREATEDB CREATEROLE;
-        grant admin to "cloudsql-admin-sa@impactful-mode-268210.iam";
+        # test
+        psql "hostaddr=127.0.0.1 user=cloudsql-admin-sa@impactful-mode-268210.iam"  <<END_OF_SQL
+        CREATE DATABASE test;
         END_OF_SQL
