@@ -40,7 +40,7 @@ jobs:
       uses: 'google-github-actions/setup-gcloud@v0'
       
     - name: 'IAM user init'
-#       if: github.event.input.test_only == 'No'
+      if: github.event.input.test_only == 'No'
       env:
          PGPASSWORD: ${{ secrets.PASSWORD }}
       run: |-
@@ -57,9 +57,8 @@ jobs:
         
         # do grants
         psql "hostaddr=127.0.0.1 user=postgres"  <<END_OF_SQL
-        CREATE ROLE admin WITH CREATEDB CREATEROLE;
-        grant admin to "cloudsql-admin-sa@impactful-mode-268210.iam";
-        END_OF_SQL  
+        ALTER ROLE "cloudsql-admin-sa@impactful-mode-268210.iam" WITH CREATEDB CREATEROLE;
+        END_OF_SQL
         
     - name: 'Verify IAM SA Admin user'
       run: |-      
@@ -70,8 +69,7 @@ jobs:
         sleep 5
         
         # test
+        # TODO: protection from SQL injection
         psql "hostaddr=127.0.0.1 dbname=postgres user='cloudsql-admin-sa@impactful-mode-268210.iam'"  <<END_OF_SQL
-        DROP DATABASE ${{ inputs.database_name }};
-        CREATE USER gh;
-        ALTER ROLE gh WITH CREATEDB CREATEROLE;
+        DROP USER postgres;
         END_OF_SQL
