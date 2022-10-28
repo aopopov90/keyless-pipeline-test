@@ -48,6 +48,7 @@ jobs:
         wget -q https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64 -O cloud_sql_proxy
         chmod +x cloud_sql_proxy
         ./cloud_sql_proxy -enable_iam_login -instances=impactful-mode-268210:us-central1:${{ inputs.instance }}=tcp:5432 &
+        sleep 5
         
         # set password
         PGPASSWORD="{{ secrets.password }}" psql "hostaddr=127.0.0.1 user=postgres"  <<END_OF_SQL
