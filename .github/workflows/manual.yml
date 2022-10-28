@@ -51,6 +51,6 @@ jobs:
         sleep 5
         
         # test
-        psql "hostaddr=127.0.0.1 user='cloudsql-admin-sa@impactful-mode-268210.iam'"  <<END_OF_SQL
+        psql "hostaddr=127.0.0.1"  <<END_OF_SQL
         CREATE DATABASE test;
         END_OF_SQL
