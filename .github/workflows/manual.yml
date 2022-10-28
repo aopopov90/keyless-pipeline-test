@@ -44,6 +44,11 @@ jobs:
       
     - name: 'test'
       run: |-
+        # set password for the default user
+        gcloud sql users set-password postgres \
+          --instance=${{ inputs.instance }} \
+          --password=${{ secrets.password }}
+      
         # start proxy
         wget -q https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64 -O cloud_sql_proxy
         chmod +x cloud_sql_proxy
@@ -56,6 +61,3 @@ jobs:
         grant CREATEDB, CREATEROLE to admin;
         grant admin to "cloudsql-admin-sa@impactful-mode-268210.iam";
         END_OF_SQL
-        # gcloud sql users set-password postgres \
-        #  --instance=${{ inputs.instance }} \
-        #  --password=${{ secrets.password }}
