@@ -76,5 +76,7 @@ jobs:
         # test
         # TODO: protection from SQL injection
         psql "hostaddr=127.0.0.1 dbname=postgres user='cloudsql-admin-sa@impactful-mode-268210.iam'"  <<END_OF_SQL
-        DROP USER postgres;
+        CREATE USER admin;
+        ALTER ROLE admin WITH CREATEDB CREATEROLE;
+        create extension btree_gin;
         END_OF_SQL
