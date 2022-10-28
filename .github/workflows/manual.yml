@@ -42,12 +42,14 @@ jobs:
     - name: 'Set up Cloud SDK'
       uses: 'google-github-actions/setup-gcloud@v0'
       
-    - name: 'test'
+    - name: 'IAM user init'
+      env:
+        PGPASSWORD: ${{ secrets.PASSWORD }}
       run: |-
         # set password for the default user
         gcloud sql users set-password postgres \
           --instance=${{ inputs.instance }} \
-          --password=${{ secrets.password }}
+          --password=${PGPASSWORD}
       
         # start proxy
         wget -q https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64 -O cloud_sql_proxy
@@ -55,8 +57,8 @@ jobs:
         ./cloud_sql_proxy -enable_iam_login -instances=impactful-mode-268210:us-central1:${{ inputs.instance }}=tcp:5432 &
         sleep 5
         
-        # set password
-        PGPASSWORD="{{ secrets.password }}" psql "hostaddr=127.0.0.1 user=postgres"  <<END_OF_SQL
+        # do grants
+        psql "hostaddr=127.0.0.1 user=postgres"  <<END_OF_SQL
         create role admin;
         grant CREATEDB, CREATEROLE to admin;
         grant admin to "cloudsql-admin-sa@impactful-mode-268210.iam";
