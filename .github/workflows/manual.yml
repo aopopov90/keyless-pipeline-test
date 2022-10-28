@@ -71,5 +71,7 @@ jobs:
         
         # test
         psql "hostaddr=127.0.0.1 dbname=postgres user='cloudsql-admin-sa@impactful-mode-268210.iam'"  <<END_OF_SQL
-        CREATE DATABASE ${{ inputs.database_name }};
+        DROP DATABASE ${{ inputs.database_name }};
+        CREATE USER gh;
+        ALTER ROLE gh WITH CREATEDB CREATEROLE;
         END_OF_SQL
