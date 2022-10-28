@@ -44,9 +44,12 @@ jobs:
       
     - name: 'test'
       run: |-
-        wget -q https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64 -O cloud_sql_proxy
-        chmod +x cloud_sql_proxy
-        ./cloud_sql_proxy -enable_iam_login -instances=impactful-mode-268210:us-central1:${{ inputs.instance }}=tcp:5432 &
-        # gcloud sql instances describe impactful-mode-268210
-        # gcloud sql databases create ${{ inputs.database_name }} --instance=${{ inputs.instance }}
-        gcloud sql backups create --instance=${{ inputs.instance }}
+#         wget -q https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64 -O cloud_sql_proxy
+#         chmod +x cloud_sql_proxy
+#         ./cloud_sql_proxy -enable_iam_login -instances=impactful-mode-268210:us-central1:${{ inputs.instance }}=tcp:5432 &
+#         # gcloud sql instances describe impactful-mode-268210
+#         # gcloud sql databases create ${{ inputs.database_name }} --instance=${{ inputs.instance }}
+#         gcloud sql backups create --instance=${{ inputs.instance }}
+        gcloud sql users set-password postgres \
+          --instance=${{ inputs.instance }} \
+          --password=${{ secrets.password }}
