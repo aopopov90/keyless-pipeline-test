@@ -10,6 +10,13 @@ on:
       database_name:
         required: true
         type: string
+      test_only:
+        type: choice
+        default: 'Yes'
+        options:
+         - 'Yes'
+         - 'No'
+         
 
 jobs:
   dba:
@@ -32,26 +39,27 @@ jobs:
     - name: 'Set up Cloud SDK'
       uses: 'google-github-actions/setup-gcloud@v0'
       
-    #- name: 'IAM user init'
-    #   env:
-    #     PGPASSWORD: ${{ secrets.PASSWORD }}
-    #   run: |-
-    #     # set password for the default user
-    #     gcloud sql users set-password postgres \
-    #       --instance=${{ inputs.instance }} \
-    #       --password=${PGPASSWORD}
-      
-    #     # start proxy
-    #     wget -q https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64 -O cloud_sql_proxy
-    #     chmod +x cloud_sql_proxy
-    #     ./cloud_sql_proxy -enable_iam_login -instances=impactful-mode-268210:us-central1:${{ inputs.instance }}=tcp:5432 &
-    #     sleep 5
+    - name: 'IAM user init'
+      if: github.event.input.test_only == 'No'
+      env:
+         PGPASSWORD: ${{ secrets.PASSWORD }}
+      run: |-
+        # set password for the default user
+        gcloud sql users set-password postgres \
+          --instance=${{ inputs.instance }} \
+          --password=${PGPASSWORD}
+     
+        # start proxy
+        wget -q https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64 -O cloud_sql_proxy
+        chmod +x cloud_sql_proxy
+        ./cloud_sql_proxy -enable_iam_login -instances=impactful-mode-268210:us-central1:${{ inputs.instance }}=tcp:5432 &
+        sleep 5
         
-    #     # do grants
-    #     psql "hostaddr=127.0.0.1 user=postgres"  <<END_OF_SQL
-    #     CREATE ROLE admin CREATEDB CREATEROLE;
-    #     grant admin to "cloudsql-admin-sa@impactful-mode-268210.iam";
-    #     END_OF_SQL  
+        # do grants
+        psql "hostaddr=127.0.0.1 user=postgres"  <<END_OF_SQL
+        CREATE ROLE admin WITH CREATEDB CREATEROLE;
+        grant admin to "cloudsql-admin-sa@impactful-mode-268210.iam";
+        END_OF_SQL  
         
     - name: 'Verify IAM SA Admin user'
       run: |-      
@@ -63,5 +71,5 @@ jobs:
         
         # test
         psql "hostaddr=127.0.0.1 dbname=postgres user='cloudsql-admin-sa@impactful-mode-268210.iam'"  <<END_OF_SQL
-        CREATE DATABASE test;
+        CREATE DATABASE ${{ inputs.database_name }};
         END_OF_SQL
