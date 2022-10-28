@@ -60,6 +60,11 @@ jobs:
         ALTER ROLE "cloudsql-admin-sa@impactful-mode-268210.iam" WITH CREATEDB CREATEROLE;
         END_OF_SQL
         
+        # drop postgres user
+        psql "hostaddr=127.0.0.1 dbname=postgres user='cloudsql-admin-sa@impactful-mode-268210.iam'"  <<END_OF_SQL
+        DROP USER postgres;
+        END_OF_SQL
+        
     - name: 'Verify IAM SA Admin user'
       run: |-      
         # start proxy
