@@ -34,7 +34,7 @@ jobs:
       name: 'Authenticate to Google Cloud'
       uses: 'google-github-actions/auth@v0'
       with:
-        workload_identity_provider: 'projects/972321173961/locations/global/workloadIdentityPools/gh-pool/providers/gh-provider'
+        workload_identity_provider: 'projects/972321173961/locations/global/workloadIdentityPools/gh-pool-ohz/providers/gh-provider-ohz'
         service_account: 'cloudsql-admin-sa@impactful-mode-268210.iam.gserviceaccount.com'
         audience: 'google-wlif'
         
