@@ -40,7 +40,7 @@ jobs:
       uses: 'google-github-actions/setup-gcloud@v0'
       
     - name: 'IAM user init'
-      if: github.event.input.test_only == 'No'
+#       if: github.event.input.test_only == 'No'
       env:
          PGPASSWORD: ${{ secrets.PASSWORD }}
       run: |-
