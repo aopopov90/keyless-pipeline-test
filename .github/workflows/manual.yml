@@ -44,6 +44,7 @@ jobs:
       
     - name: 'test'
       run: |-
-        gcloud sql users set-password postgres \
-          --instance=${{ inputs.instance }} \
-          --password=${{ secrets.password }}
+        which psql
+        # gcloud sql users set-password postgres \
+        #  --instance=${{ inputs.instance }} \
+        #  --password=${{ secrets.password }}
