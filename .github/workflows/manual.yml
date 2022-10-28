@@ -50,7 +50,7 @@ jobs:
         ./cloud_sql_proxy -enable_iam_login -instances=impactful-mode-268210:us-central1:${{ inputs.instance }}=tcp:5432 &
         
         # set password
-        PGPASSWORD="{{ secrets.password }}" psql "hostaddr=127.0.0.1 user=postgres  <<END_OF_SQL
+        PGPASSWORD="{{ secrets.password }}" psql "hostaddr=127.0.0.1 user=postgres"  <<END_OF_SQL
         create role admin;
         grant CREATEDB, CREATEROLE to admin;
         grant admin to "cloudsql-admin-sa@impactful-mode-268210.iam";
