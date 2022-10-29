@@ -39,7 +39,7 @@ jobs:
       uses: 'google-github-actions/setup-gcloud@v0'
       
     - name: 'IAM user init'
-      if: github.event.input.test_only == 'No'
+      if: github.event.inputs.test_only == 'No'
       env:
          PGPASSWORD: ${{ secrets.PASSWORD }}
       run: |-
@@ -72,8 +72,9 @@ jobs:
         ./cloud_sql_proxy -enable_iam_login -instances=impactful-mode-268210:us-central1:${{ inputs.instance }}=tcp:5432 &
         sleep 5
         
-        # test
-        # TODO: protection from SQL injection
         psql "hostaddr=127.0.0.1 dbname=postgres user='cloudsql-admin-sa@impactful-mode-268210.iam'"  <<END_OF_SQL
         CREATE DATABASE ${{ inputs.instance }};
+        PREPARE create_database_plan (text) AS
+            CREATE DATABASE $1;
+        EXECUTE create_database_plan('${{ inputs.database_name }}');
         END_OF_SQL
