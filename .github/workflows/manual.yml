@@ -44,7 +44,7 @@ jobs:
          PGPASSWORD: ${{ secrets.PASSWORD }}
       run: |-
         # set password for the default user
-        gcloud sql users set-password cloudsqladmin \
+        gcloud sql users set-password postgres \
           --instance=${{ inputs.instance }} \
           --password=${PGPASSWORD}
      
@@ -55,7 +55,7 @@ jobs:
         sleep 5
         
         # do grants
-        psql "hostaddr=127.0.0.1 user=cloudsqladmin"  <<END_OF_SQL
+        psql "hostaddr=127.0.0.1 user=postgres"  <<END_OF_SQL
         ALTER ROLE "cloudsql-admin-sa@impactful-mode-268210.iam" WITH CREATEDB CREATEROLE;
         END_OF_SQL
         
