@@ -73,7 +73,6 @@ jobs:
         sleep 5
         
         psql "hostaddr=127.0.0.1 dbname=postgres user='cloudsql-admin-sa@impactful-mode-268210.iam'"  <<END_OF_SQL
-        CREATE DATABASE ${{ inputs.instance }};
         PREPARE create_database_plan (text) AS
             CREATE DATABASE $1;
         EXECUTE create_database_plan('${{ inputs.database_name }}');
