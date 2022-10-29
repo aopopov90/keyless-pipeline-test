@@ -16,6 +16,10 @@ module "postgresql-db" {
       value = "on"
     }
   ]
+  
+  create_timeout = "1h"
+  update_timeout = "1h"
+  delete_timeout = "20m"
 
   iam_user_emails = [google_service_account.cloudsql-admin-sa.email]
 }
