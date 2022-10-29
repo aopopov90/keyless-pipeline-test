@@ -72,7 +72,7 @@ jobs:
         ./cloud_sql_proxy -enable_iam_login -instances=impactful-mode-268210:us-central1:${{ inputs.instance }}=tcp:5432 &
         sleep 5
         
-        psql "hostaddr=127.0.0.1 dbname=postgres user='cloudsql-admin-sa@impactful-mode-268210.iam'"  <<END_OF_SQL
+        psql -v ON_ERROR_STOP=1 "hostaddr=127.0.0.1 dbname=postgres user='cloudsql-admin-sa@impactful-mode-268210.iam'"  <<END_OF_SQL
         PREPARE create_database_plan (text) AS
             CREATE DATABASE $1;
         EXECUTE create_database_plan('${{ inputs.database_name }}');
